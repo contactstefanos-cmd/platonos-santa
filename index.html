@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Μυστικός Άγιος Βασίλης · Platonos Residences</title>
+<style>
+  :root{--bg:#0e1a16;--panel:#15291f;--line:#2a4a3c;--text:#f6efe0;--muted:#9bb8aa;--gold:#d9a84a;--green:#2f9e68;--red:#c6453f}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{min-height:100dvh;background:radial-gradient(900px 500px at 50% -10%,rgba(47,158,104,.22),transparent 60%),linear-gradient(180deg,#123a2b,#0a1f17 60%,#081a13);color:var(--text);font:17px/1.5 ui-sans-serif,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;padding:28px 18px 60px}
+  .wrap{max-width:460px;margin:0 auto}
+  .star{text-align:center;font-size:34px;color:var(--gold);line-height:1}
+  h1{font-family:Georgia,"Times New Roman",serif;font-size:30px;text-align:center;margin:10px 0 2px;font-weight:700}
+  .en{text-align:center;color:var(--gold);font-style:italic;font-family:Georgia,serif;font-size:19px;margin:0 0 22px}
+  .card{background:linear-gradient(180deg,var(--panel),#11231b);border:1px solid var(--line);border-radius:18px;padding:20px;margin-bottom:16px}
+  label{display:block;font-size:14px;color:var(--muted);margin:0 0 6px}
+  label b{color:var(--text);font-weight:600;font-size:16px}
+  input{width:100%;background:#0b1713;color:var(--text);border:1px solid var(--line);border-radius:12px;padding:14px;font-size:20px;text-align:center;letter-spacing:.06em}
+  input:focus{outline:2px solid var(--gold);outline-offset:1px}
+  .sp{height:16px}
+  button{width:100%;margin-top:18px;background:var(--green);color:#fff;border:0;border-radius:12px;padding:16px;font-size:18px;font-weight:700;cursor:pointer}
+  button:active{background:#25794f}
+  .msg{margin-top:14px;font-size:15px;min-height:20px}
+  .msg.err{color:#ff9a94}
+  .hide{display:none}
+  .result{text-align:center}
+  .result .lead{color:var(--muted);font-size:15px;margin:0 0 6px}
+  .big{font-family:Georgia,serif;font-size:64px;font-weight:700;color:var(--gold);line-height:1.05;margin:4px 0 2px}
+  .big small{display:block;font-size:15px;color:var(--muted);font-family:inherit;font-weight:400;letter-spacing:.14em;text-transform:uppercase;margin-bottom:6px}
+  .hush{margin-top:18px;border-top:1px solid var(--line);padding-top:16px;font-size:15px;color:var(--muted)}
+  ul{margin:14px 0 0;padding-left:20px;text-align:left;font-size:15px;color:var(--muted)}
+  li{margin-bottom:7px}
+  li b{color:var(--text)}
+  .foot{text-align:center;color:var(--muted);font-size:12.5px;margin-top:26px;letter-spacing:.12em}
+  .again{background:transparent;border:1px solid var(--line);color:var(--muted);font-size:15px;font-weight:500;padding:12px;margin-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="star">&#9733;</div>
+  <h1>Μυστικός Άγιος Βασίλης</h1>
+  <p class="en">Secret Santa</p>
+
+  <div class="card" id="form">
+    <label><b>Το δωμάτιό σου</b><br>Your room number</label>
+    <input id="room" inputmode="numeric" autocomplete="off" placeholder="101">
+    <div class="sp"></div>
+    <label><b>Κωδικός από την αφίσα</b><br>Code from the poster</label>
+    <input id="code" inputmode="numeric" autocomplete="off" placeholder="····">
+    <button id="go">Δες σε ποιον κάνεις δώρο</button>
+    <div class="msg" id="msg"></div>
+  </div>
+
+  <div class="card hide result" id="out">
+    <p class="lead">Κάνεις δώρο στο δωμάτιο<br>You are buying a gift for room</p>
+    <div class="big"><small></small><span id="target"></span></div>
+    <div class="hush">Μην το πεις σε κανέναν. Αυτό είναι όλο το μυστικό.<br>Don&rsquo;t tell anyone. That&rsquo;s the whole point.</div>
+    <ul>
+      <li>Όριο <b>15 ευρώ</b> / Limit 15 euro</li>
+      <li>Δώρο στη reception μέχρι <b>Δευτέρα 14 Δεκεμβρίου</b>, τυλιγμένο, με το δωμάτιο του παραλήπτη από πάνω / Gift to reception by Mon 14 Dec, wrapped, recipient&rsquo;s room on it</li>
+      <li>Ανταλλαγή <b>Τρίτη 15 Δεκεμβρίου, 20:00</b>, στον κοινόχρηστο χώρο / Exchange Tue 15 Dec, 20:00, common area</li>
+      <li>Σπιτάκια από μελόψωμο σε ομάδες, με τρόπαιο / Gingerbread houses in teams, with a trophy</li>
+      <li>Αν θέλεις, φέρε κάτι να μοιραστούμε / Bring something to share if you like</li>
+    </ul>
+    <button class="again" id="again">Το ξέχασα, δείξ&rsquo; το ξανά / Show mine again</button>
+  </div>
+
+  <div class="foot">P L A T O N O S &nbsp; R E S I D E N C E S</div>
+</div>
+<script>
+(function(){
+  var RING={"306":"102","102":"111","111":"309","309":"411","411":"405","405":"302","302":"316","316":"314","314":"415","415":"209","209":"216","216":"301","301":"307","307":"305","305":"212","212":"110","110":"207","207":"101","101":"313","313":"304","304":"213","213":"403","403":"402","402":"210","210":"409","409":"303","303":"311","311":"404","404":"109","109":"115","115":"315","315":"105","105":"203","203":"407","407":"113","113":"106","106":"114","114":"413","413":"112","112":"201","201":"215","215":"205","205":"202","202":"211","211":"103","103":"108","108":"107","107":"401","401":"204","204":"306"}, CODE="1512", CAP=3;
+  var $=function(i){return document.getElementById(i);};
+  function store(k,v){try{localStorage.setItem(k,v);}catch(e){}}
+  function load(k){try{return localStorage.getItem(k);}catch(e){return null;}}
+  function seen(){try{return JSON.parse(load("ss_seen")||"[]");}catch(e){return [];}}
+
+  function show(room){
+    $("target").textContent=RING[room];
+    $("form").classList.add("hide");
+    $("out").classList.remove("hide");
+  }
+  function go(){
+    var room=($("room").value||"").replace(/\D/g,"");
+    var code=($("code").value||"").replace(/\s/g,"");
+    var m=$("msg"); m.className="msg err";
+    if(!room){m.textContent="Γράψε το δωμάτιό σου. / Enter your room.";return;}
+    if(code!==CODE){m.textContent="Λάθος κωδικός. Είναι στην αφίσα. / Wrong code. It is on the poster.";return;}
+    if(!RING[room]){m.textContent="Το δωμάτιο "+room+" δεν είναι στη λίστα. Πέρνα από τη reception. / Room "+room+" is not on the list. Come by reception.";return;}
+    var mine=load("ss_mine"), list=seen();
+    if(!mine){store("ss_mine",room);mine=room;}
+    if(room!==mine){
+      if(list.indexOf(room)<0){
+        if(list.length>=CAP){
+          m.textContent="Αρκετά ψάξιμο για σήμερα. Το δικό σου το ξέρεις ήδη. / That is enough looking around. You already know yours.";
+          return;
+        }
+        list.push(room);store("ss_seen",JSON.stringify(list));
+      }
+    }
+    m.textContent="";m.className="msg";
+    show(room);
+  }
+  $("go").onclick=go;
+  $("code").addEventListener("keydown",function(e){if(e.key==="Enter")go();});
+  $("room").addEventListener("keydown",function(e){if(e.key==="Enter")$("code").focus();});
+  $("again").onclick=function(){
+    $("out").classList.add("hide");$("form").classList.remove("hide");
+    $("room").value=load("ss_mine")||"";$("code").value="";
+  };
+  var mine=load("ss_mine");
+  if(mine&&RING[mine]){$("room").value=mine;}
+})();
+</script>
+</body>
+</html>
